@@ -12,25 +12,33 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import Select
 from PIL import Image
 from io import BytesIO
+from selenium.webdriver.chrome.service import Service as ChromeService
 
-def get_driver():
-    return webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+# def get_driver():
+#     return webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
-options = Options()
-options.add_argument('--disable-gpu')
-options.add_argument('--headless')
+# options = Options()
+# options.add_argument('--disable-gpu')
+# options.add_argument('--headless')
 
 
 
 def hotel_crawling(country,city,adult,kid,sort):
+    
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument('--headless')
+    chrome_options.add_argument('--window-size=1920x1080')
+    chrome_options.add_argument('--disable-gpu')
+
+    driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=chrome_options)
+
     # options = webdriver.ChromeOptions()
-    options = Options()
-    driver = get_driver()
-    driver.get('https://hotels.naver.com/')
+    # options = Options()
+    # driver.get('https://hotels.naver.com/')
     # driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()),options=options)
     actions = ActionChains(driver)
-    # url = 'https://hotels.naver.com/'
-    # driver.get(url)
+    url = 'https://hotels.naver.com/'
+    driver.get(url)
     
     # 여행지 입력
     driver.find_element('xpath','//*[@id="__next"]/div/div/div[2]/div/div/div/div[1]/button').click()
