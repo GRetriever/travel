@@ -1,18 +1,20 @@
 import streamlit as st
-from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.chrome.service import Service as ChromeService
 import pandas as pd
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 
-chrome_options = webdriver.ChromeOptions()
-chrome_options.add_argument('--headless')
-chrome_options.add_argument('--window-size=1920x1080')
-chrome_options.add_argument('--disable-gpu')
+@st.experimental_singleton
+def get_driver():
+    return webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
-driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=chrome_options)
+options = Options()
+options.add_argument('--disable-gpu')
+options.add_argument('--headless')
 
-url = 'https://quotes.toscrape.com/'
-driver.get(url)
+driver = get_driver()
+driver.get('https://quotes.toscrape.com/')
 
 quotes = driver.find_elements('xpath', '//span[@class="text"]')
 
